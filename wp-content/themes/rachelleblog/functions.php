@@ -30,6 +30,7 @@ function rachelleblog_setup() {
 	 */
 	load_theme_textdomain( 'rachelleblog', get_template_directory() . '/languages' );
 
+	define( 'THEMEROOT', get_stylesheet_directory_uri() );
 	// Add default posts and comments RSS feed links to head.
 	add_theme_support( 'automatic-feed-links' );
 
