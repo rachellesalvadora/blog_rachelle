@@ -1,105 +1,99 @@
-<?php
-/**
- * The template for displaying archive pages.
- *
- * Learn more: http://codex.wordpress.org/Template_Hierarchy
- *
- * @package Rachelle Blog
- */
+<?php get_header(); ?>
 
-get_header(); ?>
+			<div id="content">
 
-	<section id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+				<div id="inner-content" class="wrap cf">
 
-		<?php if ( have_posts() ) : ?>
+						<div id="main" class="m-all t-2of3 d-5of7 cf" role="main">
 
-			<header class="page-header">
-				<h1 class="page-title">
-					<?php
-						if ( is_category() ) :
-							single_cat_title();
+							<?php if (is_category()) { ?>
+								<h1 class="archive-title h2">
+									<span><?php _e( 'Posts Categorized:', 'bonestheme' ); ?></span> <?php single_cat_title(); ?>
+								</h1>
 
-						elseif ( is_tag() ) :
-							single_tag_title();
+							<?php } elseif (is_tag()) { ?>
+								<h1 class="archive-title h2">
+									<span><?php _e( 'Posts Tagged:', 'bonestheme' ); ?></span> <?php single_tag_title(); ?>
+								</h1>
 
-						elseif ( is_author() ) :
-							printf( __( 'Author: %s', 'rachelleblog' ), '<span class="vcard">' . get_the_author() . '</span>' );
+							<?php } elseif (is_author()) {
+								global $post;
+								$author_id = $post->post_author;
+							?>
+								<h1 class="archive-title h2">
 
-						elseif ( is_day() ) :
-							printf( __( 'Day: %s', 'rachelleblog' ), '<span>' . get_the_date() . '</span>' );
+									<span><?php _e( 'Posts By:', 'bonestheme' ); ?></span> <?php the_author_meta('display_name', $author_id); ?>
 
-						elseif ( is_month() ) :
-							printf( __( 'Month: %s', 'rachelleblog' ), '<span>' . get_the_date( _x( 'F Y', 'monthly archives date format', 'rachelleblog' ) ) . '</span>' );
+								</h1>
+							<?php } elseif (is_day()) { ?>
+								<h1 class="archive-title h2">
+									<span><?php _e( 'Daily Archives:', 'bonestheme' ); ?></span> <?php the_time('l, F j, Y'); ?>
+								</h1>
 
-						elseif ( is_year() ) :
-							printf( __( 'Year: %s', 'rachelleblog' ), '<span>' . get_the_date( _x( 'Y', 'yearly archives date format', 'rachelleblog' ) ) . '</span>' );
+							<?php } elseif (is_month()) { ?>
+									<h1 class="archive-title h2">
+										<span><?php _e( 'Monthly Archives:', 'bonestheme' ); ?></span> <?php the_time('F Y'); ?>
+									</h1>
 
-						elseif ( is_tax( 'post_format', 'post-format-aside' ) ) :
-							_e( 'Asides', 'rachelleblog' );
+							<?php } elseif (is_year()) { ?>
+									<h1 class="archive-title h2">
+										<span><?php _e( 'Yearly Archives:', 'bonestheme' ); ?></span> <?php the_time('Y'); ?>
+									</h1>
+							<?php } ?>
 
-						elseif ( is_tax( 'post_format', 'post-format-gallery' ) ) :
-							_e( 'Galleries', 'rachelleblog' );
+							<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
-						elseif ( is_tax( 'post_format', 'post-format-image' ) ) :
-							_e( 'Images', 'rachelleblog' );
+							<article id="post-<?php the_ID(); ?>" <?php post_class( 'cf' ); ?> role="article">
 
-						elseif ( is_tax( 'post_format', 'post-format-video' ) ) :
-							_e( 'Videos', 'rachelleblog' );
+								<header class="article-header">
 
-						elseif ( is_tax( 'post_format', 'post-format-quote' ) ) :
-							_e( 'Quotes', 'rachelleblog' );
+									<h3 class="h2 entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h3>
+									<p class="byline vcard"><?php
+										printf(__( 'Posted', 'bonestheme' ) . ' <time class="updated" datetime="%1$s" pubdate>%2$s</time> ' . __('by', 'bonestheme' ) . ' <span class="author">%3$s</span> <span class="amp">&</span> ' . __('filed under', 'bonestheme') .  ' %4$s.', get_the_time('Y-m-j'), get_the_time(__( 'F jS, Y', 'bonestheme' )), get_the_author_link( get_the_author_meta( 'ID' ) ), get_the_category_list(', '));
+									?></p>
 
-						elseif ( is_tax( 'post_format', 'post-format-link' ) ) :
-							_e( 'Links', 'rachelleblog' );
+								</header>
 
-						elseif ( is_tax( 'post_format', 'post-format-status' ) ) :
-							_e( 'Statuses', 'rachelleblog' );
+								<section class="entry-content cf">
 
-						elseif ( is_tax( 'post_format', 'post-format-audio' ) ) :
-							_e( 'Audios', 'rachelleblog' );
+									<?php the_post_thumbnail( 'bones-thumb-300' ); ?>
 
-						elseif ( is_tax( 'post_format', 'post-format-chat' ) ) :
-							_e( 'Chats', 'rachelleblog' );
+									<?php the_excerpt(); ?>
 
-						else :
-							_e( 'Archives', 'rachelleblog' );
+								</section>
 
-						endif;
-					?>
-				</h1>
-				<?php
-					// Show an optional term description.
-					$term_description = term_description();
-					if ( ! empty( $term_description ) ) :
-						printf( '<div class="taxonomy-description">%s</div>', $term_description );
-					endif;
-				?>
-			</header><!-- .page-header -->
+								<footer class="article-footer">
 
-			<?php /* Start the Loop */ ?>
-			<?php while ( have_posts() ) : the_post(); ?>
+								</footer>
 
-				<?php
-					/* Include the Post-Format-specific template for the content.
-					 * If you want to override this in a child theme, then include a file
-					 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-					 */
-					get_template_part( 'content', get_post_format() );
-				?>
+							</article>
 
-			<?php endwhile; ?>
+							<?php endwhile; ?>
 
-			<?php rachelleblog_paging_nav(); ?>
+									<?php bones_page_navi(); ?>
 
-		<?php else : ?>
+							<?php else : ?>
 
-			<?php get_template_part( 'content', 'none' ); ?>
+									<article id="post-not-found" class="hentry cf">
+										<header class="article-header">
+											<h1><?php _e( 'Oops, Post Not Found!', 'bonestheme' ); ?></h1>
+										</header>
+										<section class="entry-content">
+											<p><?php _e( 'Uh Oh. Something is missing. Try double checking things.', 'bonestheme' ); ?></p>
+										</section>
+										<footer class="article-footer">
+												<p><?php _e( 'This is the error message in the archive.php template.', 'bonestheme' ); ?></p>
+										</footer>
+									</article>
 
-		<?php endif; ?>
+							<?php endif; ?>
 
-		</main><!-- #main -->
-	</section><!-- #primary -->
+						</div>
 
-<?php get_sidebar(); ?>
+					<?php get_sidebar(); ?>
+
+				</div>
+
+			</div>
+
 <?php get_footer(); ?>

@@ -1,25 +1,34 @@
-<?php
-/**
- * The template for displaying the footer.
- *
- * Contains the closing of the #content div and all content after
- *
- * @package Rachelle Blog
- */
-?>
+			<footer class="footer" role="contentinfo">
 
-	</div><!-- #content -->
+				<div id="inner-footer" class="wrap cf">
 
-	<footer id="colophon" class="site-footer" role="contentinfo">
-		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'http://wordpress.org/', 'rachelleblog' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'rachelleblog' ), 'WordPress' ); ?></a>
-			<span class="sep"> | </span>
-			<?php printf( __( 'Theme: %1$s by %2$s.', 'rachelleblog' ), 'Rachelle Blog', '<a href="http://rachellesalvadora.com" rel="designer">Rachelle Salvadora</a>' ); ?>
-		</div><!-- .site-info -->
-	</footer><!-- #colophon -->
-</div><!-- #page -->
+					<nav role="navigation">
+						<?php wp_nav_menu(array(
+    					'container' => '',                              // remove nav container
+    					'container_class' => 'footer-links cf',         // class of container (should you choose to use it)
+    					'menu' => __( 'Footer Links', 'bonestheme' ),   // nav name
+    					'menu_class' => 'nav footer-nav cf',            // adding custom nav class
+    					'theme_location' => 'footer-links',             // where it's located in the theme
+    					'before' => '',                                 // before the menu
+        			'after' => '',                                  // after the menu
+        			'link_before' => '',                            // before each link
+        			'link_after' => '',                             // after each link
+        			'depth' => 0,                                   // limit the depth of the nav
+    					'fallback_cb' => 'bones_footer_links_fallback'  // fallback function
+						)); ?>
+					</nav>
 
-<?php wp_footer(); ?>
+					<p class="source-org copyright">&copy; <?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>.</p>
 
-</body>
-</html>
+				</div>
+
+			</footer>
+
+		</div>
+
+		<?php // all js scripts are loaded in library/bones.php ?>
+		<?php wp_footer(); ?>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->
